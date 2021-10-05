@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+# brew-install - install Homebrew to a custom prefix
+# copyright (c) 2021  Alex Rogers (https://github.com/linguisticmind)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+############################################################
+
+# This script is a tool intended to help automate installation of
+# Homebrew to a custom prefix. It is based on the instructions provided here:
+# https://docs.brew.sh/Installation#alternative-installs
+#
+# If you'd like to install Homebrew to the default prefix (/usr/local), then it
+# is best to use the default installation instructions provided on this page:
+# https://brew.sh/
+
+# This script downloads the latest version of Homebrew automatically from GitHub.
+
+if [[ $# = 0 ]]; then
+  echo "${0##*/} - download and install Homebrew to a custom prefix"
+  echo "Usage: ${0##*/} <prefix>"
+  exit
+fi
+
+prefix="$1"
+
+if [[ -d "$prefix" ]]; then
+  echo "Prefix directory already exists." >&2
+  while read -p "If you proceed, the '$prefix' directory will be deleted and a new one with the same name will be created."$'\n'"Proceed? [y/N] "; do
+    if [[ $REPLY =  [Yy] ]]; then
+      rm -rf -- "$prefix"
+      break
+    elif [[ ! $REPLY || $REPLY = [Nn] ]]; then
+      exit 1
+    fi 
+  done
+elif [[ -e "$prefix" ]]; then 
+  echo "'$2' is not a directory." >&2 && exit 1
+fi
+
+mkdir -p -- "$prefix" &&
+  curl -L https://github.com/Homebrew/brew/tarball/master |
+    tar -xvz --strip 1 -C "$prefix"
+
+mkdir "$prefix/Applications" "$prefix/Fonts"

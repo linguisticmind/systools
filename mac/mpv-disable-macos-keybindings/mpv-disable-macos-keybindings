@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+# mpv-disable-macos-keybindings
+# copyright (c) 2021  Alex Rogers (https://github.com/linguisticmind)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+############################################################
+
+# This script disables keybindings in mpv player on MacOS
+# that are MacOS-specific and override those set by mpv player itself
+# (e.g. in the input.conf file).
+# Those are the keybindings that appear in various menubar menus
+# (such as File, Edit etc.).
+
+# Sources:
+# https://github.com/mpv-player/mpv/issues/5811#issuecomment-387675047
+# https://superuser.com/questions/720789/map-key-to-clear-mac-terminal
+
+# defaults delete mpv NSUserKeyEquivalents # To delete existing dictionary
+
+defaults write mpv NSUserKeyEquivalents -dict-add \
+  'Open File...' '\0' \
+  'Open URL...' '\0' \
+  'Preferences...' '\0' \
+  'Hide mpv' '\0' \
+  'Hide Others' '\0' \
+  Undo '\0' \
+  Redo '\0' \
+  Cut '\0' \
+  Copy '\0' \
+  Paste '\0' \
+  'Select All' '\0' \
+  'Normal Size' '\0' \
+  'Half Size' '\0' \
+  'Double Size' '\0' \
+  Close '\0' \
+  Minimize '\0' \
+  Zoom '\0'
+
+defaults read mpv NSUserKeyEquivalents
